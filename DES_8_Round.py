@@ -33,13 +33,14 @@ def gen_key(key):
   key_56=gen_key56(key_64)                          #parity bits dropped
   left_key,right_key = split_key(key_56)            #key split
   round_keys = list()
-  for index in range(7):                            #changeno
+  for index in range(8):                            #changeno
     L=circular_shift(left_key,round_shifts[index])
     R=circular_shift(right_key,round_shifts[index])
     round_key=gen_48bit(L+R)                        #48 bit key generated
     round_keys.append(round_key)                    #list of keys for all round
     left_key=L
     right_key=R
+  #print(round_keys[7][48-18:])
   return round_keys
 
 def permutation(plain_text):
@@ -255,8 +256,8 @@ def encrypt(plain_text, sub_keys):
   plain_textb = ""
   for i in range(16):
     plain_textb += '{0:04b}'.format(int(plain_text[i], base =16))
-  plain_textp = permutation(plain_textb)       #Intital permutation
-  #plain_textp = plain_textb                   #Intital permutation removed
+  #plain_textp = permutation(plain_textb)       #Intital permutation
+  plain_textp = plain_textb                   #Intital permutation removed
   left,right = plain_textp[:32],plain_textp[32:]
   for i in range(7):                   #changeno
     out = func(right,sub_keys[i])     #function called on right half data
@@ -267,8 +268,8 @@ def encrypt(plain_text, sub_keys):
   out = func(right,sub_keys[3])
   temp = int(out, base=2) ^ int(left , base=2)
   left = '{0:032b}'.format(temp)
-  final = inv_per(left+right)            #Inverse permutation after 4 rounds
-  #final = left+right             #Inverse permutation removed
+  #final = inv_per(left+right)            #Inverse permutation after 4 rounds
+  final = left+right             #Inverse permutation removed
   cipher = hex(int(final,2))[2:]
   return cipher
 
@@ -281,10 +282,9 @@ def enc(plain_text):
   #print(cipher_text)
   return cipher_text
 
-
 def enc2(plain_text,key):
   sub_keys= gen_key(key)
   cipher_text = encrypt(plain_text,sub_keys)
   return cipher_tex
 
-print(enc('133457799BBCDFF1'))
+#print(enc('133457799BBCDFF1'))
