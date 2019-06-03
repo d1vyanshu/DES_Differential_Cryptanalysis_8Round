@@ -40,7 +40,6 @@ def gen_key(key):
     round_keys.append(round_key)                    #list of keys for all round
     left_key=L
     right_key=R
-  #print(round_keys[7][48-18:])
   return round_keys
 
 def permutation(plain_text):
@@ -264,8 +263,10 @@ def encrypt(plain_text, sub_keys):
     temp = int(out, base=2) ^ int(left, base=2)   #XOR
     left =right
     right = '{0:032b}'.format(temp)
+    # if i == 5 :
+    #   print(f"6th round output : {left+right}")
 
-  out = func(right,sub_keys[3])
+  out = func(right,sub_keys[7])
   temp = int(out, base=2) ^ int(left , base=2)
   left = '{0:032b}'.format(temp)
   #final = inv_per(left+right)            #Inverse permutation after 4 rounds
