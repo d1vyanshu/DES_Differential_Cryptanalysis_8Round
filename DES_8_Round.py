@@ -5,7 +5,6 @@ def gen_key56(key_64):
   p = [57,49,41,33,25,17,9,1,58,50,42,34,26,18,10,2,59,51,43,35,27,19,11,3,60,52,44,36,63,55,47,39,31,23,15,7,62,54,46,38,30,22,14,6,61,53,45,37,29,21,13,5,28,20,12,4]
   for x in p:
     key_56 += key_64[x-1]
-  #print(key_56)
   return key_56
 
 def circular_shift(key,n):
@@ -256,8 +255,8 @@ def encrypt(plain_text, sub_keys):
   plain_textb = ""
   for i in range(16):
     plain_textb += '{0:04b}'.format(int(plain_text[i], base =16))
-  #plain_textp = permutation(plain_textb)       #Intital permutation
-  plain_textp = plain_textb                   #Intital permutation removed
+  plain_textp = permutation(plain_textb)       #Intital permutation
+  #plain_textp = plain_textb                   #Intital permutation removed
   left,right = plain_textp[:32],plain_textp[32:]
   for i in range(7):                   #changeno
     out = func(right,sub_keys[i])     #function called on right half data
@@ -270,8 +269,8 @@ def encrypt(plain_text, sub_keys):
   out = func(right,sub_keys[7])
   temp = int(out, base=2) ^ int(left , base=2)
   left = '{0:032b}'.format(temp)
-  #final = inv_per(left+right)            #Inverse permutation after 4 rounds
-  final = left+right             #Inverse permutation removed
+  final = inv_per(left+right)            #Inverse permutation after 4 rounds
+  #final = left+right             #Inverse permutation removed
   cipher = hex(int(final,2))[2:]
   return cipher
 
@@ -287,6 +286,6 @@ def enc(plain_text):
 def enc2(plain_text,key):
   sub_keys= gen_key(key)
   cipher_text = encrypt(plain_text,sub_keys)
-  return cipher_tex
+  return cipher_text
 
 #print(enc('133457799BBCDFF1'))

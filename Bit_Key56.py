@@ -1,10 +1,16 @@
-import code as c
+import DES_8_Round as c
 import sys
 
 p =  [14,17,11,24,1,5,3,28,15,6,21,10,23,19,12,4,26,8,16,7,27,20,13,2,41,52,31,37,47,55,30,40,51,45,33,48,44,49,39,56,34,53,46,42,50,36,29,32]
 rotate= [1,1,2,2]
 rotate_rev=[2,2,1,1]
 from_64_to_56=[57,49,41,33,25,17,9,1,58,50,42,34,26,18,10,2,59,51,43,35,27,19,11,3,60,52,44,36,63,55,47,39,31,23,15,7,62,54,46,38,30,22,14,6,61,53,45,37,29,21,13,5,28,20,12,4]
+def add_zero(x,num):
+    h=len(x)
+    if h<num:
+        for i in range(num-h):
+            x="0"+x
+    return x
 
 def right_shift(string,d):
     Lfirst = string[0 : d]
@@ -35,17 +41,17 @@ def blocks(key):
 	block[8]=key
 	block[7]=right_shift(block[8][:28],2)+right_shift(block[8][28:],2)
 	block[6]=right_shift(block[7][:28],2)+right_shift(block[7][28:],2)
-	block[5]=right_shift(block[6][:28],1)+right_shift(block[6][28:],2)
-	block[4]=right_shift(block[5][:28],1)+right_shift(block[5][28:],2)
+	block[5]=right_shift(block[6][:28],2)+right_shift(block[6][28:],2)
+	block[4]=right_shift(block[5][:28],2)+right_shift(block[5][28:],2)
 	block[3]=right_shift(block[4][:28],2)+right_shift(block[4][28:],2)
 	block[2]=right_shift(block[3][:28],2)+right_shift(block[3][28:],2)
 	block[1]=right_shift(block[2][:28],1)+right_shift(block[2][28:],1)
 	block[0]=right_shift(block[1][:28],1)+right_shift(block[1][28:],1)
-	return block[7]
+	return block[0]
 
 def brute_force(keyfinal):
 	for x in range(2**14):
-		digits=k.add_zero(bin(x)[2:],14)
+		digits=add_zero(bin(x)[2:],14)
 		digits=list(digits)
 		counter=0
 		key=list(keyfinal)
@@ -61,20 +67,14 @@ def brute_force(keyfinal):
 			i=i+1
 
 		key_64=''.join(key_64)
-		key_64=k.add_zero(hex(int(key_64,2))[2:],16)
+		key_64=add_zero(hex(int(key_64,2))[2:],16)
 		strng='133457799BBCDFF2'
 		cipher=c.enc(strng)
 		if c.enc2(strng,key_64) == cipher:
 			return key_56
 			break
-	return
+	return key_56
 
-
-
-
-
-
-
-
-
+def answer(give_key):
+	return brute_force(blocks(from_48_to_56(give_key)))
 
