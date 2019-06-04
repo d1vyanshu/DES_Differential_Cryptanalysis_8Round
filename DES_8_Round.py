@@ -40,6 +40,7 @@ def gen_key(key):
     round_keys.append(round_key)                    #list of keys for all round
     left_key=L
     right_key=R
+  #print(round_keys[7])
   return round_keys
 
 def permutation(plain_text):
